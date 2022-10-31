@@ -23,29 +23,7 @@ namespace Payment_api.Controllers
 
                      }
 
-                    public bool analisaItens(Venda venda)
-                    {
-
-                            int ItensNaLista= 0;
-
-                            foreach (var item in venda.Itens){
-
-                                    if(_context.Itens.Find(item.Id) != null )
-
-                                        ItensNaLista++;
-                                
-                            }    
-
-                           if(ItensNaLista == venda.Itens.Count())
-
-                                return true;
-
-                            else
-
-                                return false;
-
-
-                    }
+                  
 
                    
 
@@ -53,7 +31,7 @@ namespace Payment_api.Controllers
                     public IActionResult Create(Venda venda){
 
                             if((venda.Itens.Count > 0) && (venda.IdVendedor != 0)&&
-                                 (analisaItens(venda) == true) && (_context.Vendedores.Find(venda.IdVendedor).Id == venda.IdVendedor)
+                                  (_context.Vendedores.Find(venda.IdVendedor).Id == venda.IdVendedor)
                                  )
 
                             {
