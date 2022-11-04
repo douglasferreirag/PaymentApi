@@ -37,7 +37,6 @@ namespace Payment_api.Controllers
                                           .Where(b  => b.IdVenda == indVenda)
                                           .ToList();
 
-                        
                              if(query.Count() != 0)   
 
                                   return Ok(query);
