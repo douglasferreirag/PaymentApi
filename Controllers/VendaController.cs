@@ -16,6 +16,8 @@ namespace Payment_api.Controllers
     {
         
                     private readonly CatalogoContext _context;
+
+                    
                     public VendaController(CatalogoContext context)
                     {
 
@@ -23,26 +25,42 @@ namespace Payment_api.Controllers
 
                      }
 
-                  
+                    [HttpGet("Venda/{indVenda}/listagemItens")]
+                    public ActionResult <List<Item>> ListaItensPorVenda(int indVenda){
 
-                   
+               
+                        List<Item> query = new List<Item>(); 
+
+                        Console.WriteLine(query.Count());
+                         
+                          query = _context.Itens
+                                          .Where(b  => b.IdVenda == indVenda)
+                                          .ToList();
+
+                        
+                             if(query.Count() != 0)   
+
+                                  return Ok(query);
+
+                              else
+
+                                  return NotFound("Erro");
+
+                     }
+      
+
+                  
 
                      [HttpPost]
                     public IActionResult Create(Venda venda){
 
-                            if((venda.Itens.Count > 0) && (venda.IdVendedor != 0)&&
-                                  (_context.Vendedores.Find(venda.IdVendedor).Id == venda.IdVendedor)
-                                 )
-
-                            {
+                           
                                 _context.Add(venda);
                                 _context.SaveChanges();
                                 return CreatedAtAction(nameof(ObterPorId), new { id = venda.Id }, venda);
-                            }
+                              
 
-                            else
-
-                                return BadRequest(venda);
+                            
 
                     }
 
@@ -50,12 +68,13 @@ namespace Payment_api.Controllers
                     public IActionResult ObterPorId(int id){
 
                                     var venda  = _context.Vendas.Find(id);
+                                  
                                     if(venda == null)
                                             return NotFound();
                                     return Ok(venda);
                     }
 
-                    [HttpPut("{id}")]
+                  [HttpPut("{id}")]
                     public IActionResult Atualizar (int id, StatusVenda Status){
 
                                 var VendaBanco =  _context.Vendas.Find(id);
@@ -84,5 +103,8 @@ namespace Payment_api.Controllers
 
                      }
 
+                     
+                   
+                   
     }
 }

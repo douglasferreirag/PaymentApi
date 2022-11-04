@@ -12,7 +12,7 @@ using Payment_api.Context;
 namespace PaymentApi.Migrations
 {
     [DbContext(typeof(CatalogoContext))]
-    [Migration("20221031000502_CriacaoTabelaVenda")]
+    [Migration("20221104224701_CriacaoTabelaVenda")]
     partial class CriacaoTabelaVenda
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace PaymentApi.Migrations
                     b.Property<int>("IdProduto")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdVenda")
+                        .HasColumnType("int");
+
                     b.Property<double>("Quantidade")
                         .HasPrecision(14, 2)
                         .HasColumnType("float(14)");
@@ -43,14 +46,14 @@ namespace PaymentApi.Migrations
                         .HasPrecision(14, 2)
                         .HasColumnType("float(14)");
 
-                    b.Property<int?>("VendaId")
+                    b.Property<int?>("vendaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdProduto");
 
-                    b.HasIndex("VendaId");
+                    b.HasIndex("vendaId");
 
                     b.ToTable("Itens");
                 });
@@ -84,11 +87,6 @@ namespace PaymentApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CodigoPedido")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
@@ -150,11 +148,13 @@ namespace PaymentApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Payment_api.Entities.Venda", null)
-                        .WithMany("Itens")
-                        .HasForeignKey("VendaId");
+                    b.HasOne("Payment_api.Entities.Venda", "venda")
+                        .WithMany()
+                        .HasForeignKey("vendaId");
 
                     b.Navigation("Produto");
+
+                    b.Navigation("venda");
                 });
 
             modelBuilder.Entity("Payment_api.Entities.Venda", b =>
@@ -164,11 +164,6 @@ namespace PaymentApi.Migrations
                         .HasForeignKey("VendedorId");
 
                     b.Navigation("Vendedor");
-                });
-
-            modelBuilder.Entity("Payment_api.Entities.Venda", b =>
-                {
-                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

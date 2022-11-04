@@ -28,7 +28,9 @@ namespace Payment_api.Entities
                 [Precision(14, 2)]
                 public double  Valor { get; set; }
 
-
+               [Required(ErrorMessage = "Não preencheu o campo id da venda")]
+                public int IdVenda{ get; set; }
+                public Venda  venda{ get; set; }
         
     }
 }
